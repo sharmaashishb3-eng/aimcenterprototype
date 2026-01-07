@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
@@ -11,9 +11,18 @@ const inter = Inter({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#00CED1",
+};
+
 export const metadata: Metadata = {
   title: "AIM Center - Learning Today, Leading Tomorrow",
   description: "India's #1 Learning App for exam preparation. Get live classes, mock tests, video courses, and study materials for Banking, SSC, Railway, UPSC, and more.",
+  metadataBase: new URL("http://localhost:3000"),
   keywords: "exam preparation, mock tests, live classes, banking exams, SSC, Railway, UPSC, online learning",
   authors: [{ name: "AIM Center" }],
   manifest: "/manifest.json",
@@ -33,13 +42,6 @@ export const metadata: Metadata = {
     title: "AIM Center - Learning Today, Leading Tomorrow",
     description: "India's #1 Learning App for exam preparation",
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
-  themeColor: "#00CED1",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
