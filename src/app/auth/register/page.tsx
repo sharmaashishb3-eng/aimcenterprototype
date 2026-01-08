@@ -78,7 +78,13 @@ export default function RegisterPage() {
             });
 
             if (error) {
-                setError(error.message);
+                console.error("Signup error:", error);
+                // If the error message is generic, provide more context
+                if (error.message.includes("Database error")) {
+                    setError("There was a database issue saving your profile. This usually happens if the email is already in use or the system is experiencing high load.");
+                } else {
+                    setError(error.message);
+                }
             } else {
                 router.push("/auth/verify-email");
             }
@@ -124,10 +130,10 @@ export default function RegisterPage() {
                             <div key={s} className="flex items-center">
                                 <div
                                     className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${s === step
-                                            ? "bg-gradient-to-r from-[#00CED1] to-[#D81B60] text-white"
-                                            : s < step
-                                                ? "bg-green-500 text-white"
-                                                : "bg-gray-200 text-gray-500"
+                                        ? "bg-gradient-to-r from-[#00CED1] to-[#D81B60] text-white"
+                                        : s < step
+                                            ? "bg-green-500 text-white"
+                                            : "bg-gray-200 text-gray-500"
                                         }`}
                                 >
                                     {s < step ? "✓" : s}
@@ -144,8 +150,14 @@ export default function RegisterPage() {
 
                     {/* Error Message */}
                     {error && (
-                        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
-                            {error}
+                        <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg animate-shake">
+                            <div className="flex items-center gap-3">
+                                <span className="text-xl">⚠️</span>
+                                <div>
+                                    <p className="font-bold text-red-800 text-sm">Action Required</p>
+                                    <p className="text-red-600 text-xs mt-0.5 leading-relaxed">{error}</p>
+                                </div>
+                            </div>
                         </div>
                     )}
 
@@ -217,8 +229,8 @@ export default function RegisterPage() {
                                             type="button"
                                             onClick={() => updateFormData("examPreference", exam.id)}
                                             className={`p-4 rounded-xl border-2 text-left transition-all ${formData.examPreference === exam.id
-                                                    ? "border-[#00CED1] bg-[#00CED1]/10"
-                                                    : "border-gray-200 hover:border-gray-300"
+                                                ? "border-[#00CED1] bg-[#00CED1]/10"
+                                                : "border-gray-200 hover:border-gray-300"
                                                 }`}
                                         >
                                             <span className="text-2xl mb-2 block">{exam.icon}</span>

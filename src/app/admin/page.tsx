@@ -4,11 +4,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import type { Profile } from "@/types/database";
+
 
 export default function AdminDashboard() {
     const router = useRouter();
-    const [profile, setProfile] = useState<Profile | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -32,7 +31,6 @@ export default function AdminDashboard() {
                 return;
             }
 
-            setProfile(profileData);
             setLoading(false);
         };
 
@@ -191,8 +189,8 @@ export default function AdminDashboard() {
                                     <div className="flex items-center gap-3">
                                         <span
                                             className={`px-3 py-1 rounded-full text-xs font-bold capitalize ${user.role === "teacher"
-                                                    ? "bg-purple-100 text-purple-600"
-                                                    : "bg-blue-100 text-blue-600"
+                                                ? "bg-purple-100 text-purple-600"
+                                                : "bg-blue-100 text-blue-600"
                                                 }`}
                                         >
                                             {user.role}

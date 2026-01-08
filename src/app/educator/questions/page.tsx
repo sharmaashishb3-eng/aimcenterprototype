@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 interface Question {
@@ -198,8 +197,8 @@ export default function QuestionBankPage() {
                                         <div
                                             key={opt.id}
                                             className={`p-3 rounded-lg text-sm ${opt.id === question.correct_answer
-                                                    ? "bg-green-100 text-green-700 border-2 border-green-300"
-                                                    : "bg-gray-50 text-gray-600"
+                                                ? "bg-green-100 text-green-700 border-2 border-green-300"
+                                                : "bg-gray-50 text-gray-600"
                                                 }`}
                                         >
                                             <span className="font-bold uppercase">{opt.id}.</span> {opt.text}
@@ -257,8 +256,8 @@ export default function QuestionBankPage() {
                                                     setFormData({ ...formData, correct_answer: opt.id })
                                                 }
                                                 className={`px-3 py-2 rounded-xl font-medium ${formData.correct_answer === opt.id
-                                                        ? "bg-green-500 text-white"
-                                                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                                    ? "bg-green-500 text-white"
+                                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                                                     }`}
                                             >
                                                 ✓

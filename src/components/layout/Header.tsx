@@ -33,8 +33,8 @@ const Header = () => {
         <>
             <header
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-                        ? "bg-white shadow-md py-2"
-                        : "bg-white/95 backdrop-blur-sm py-4"
+                    ? "bg-white shadow-md py-2"
+                    : "bg-white/95 backdrop-blur-sm py-4"
                     }`}
             >
                 <div className="container mx-auto px-4">
@@ -95,8 +95,8 @@ const Header = () => {
                                 {/* Dropdown Menu */}
                                 <div
                                     className={`absolute top-full left-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-2 transition-all duration-200 ${isCoursesOpen
-                                            ? "opacity-100 visible translate-y-0"
-                                            : "opacity-0 invisible -translate-y-2"
+                                        ? "opacity-100 visible translate-y-0"
+                                        : "opacity-0 invisible -translate-y-2"
                                         }`}
                                 >
                                     {examCategories.map((category) => (
@@ -181,7 +181,6 @@ const Header = () => {
             <MobileMenu
                 isOpen={isMobileMenuOpen}
                 onClose={() => setIsMobileMenuOpen(false)}
-                examCategories={examCategories}
             />
         </>
     );

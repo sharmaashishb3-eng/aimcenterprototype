@@ -315,6 +315,27 @@ a:hover {
 .animate-pulse { animation: pulse 2s infinite; }
 .animate-bounce { animation: bounce 2s infinite; }
 
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes tilt {
+  0%, 50%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(1deg); }
+  75% { transform: rotate(-1deg); }
+}
+
+.animate-shake { animation: shake 0.5s ease-in-out; }
+.animate-gradient-x { animation: gradient-x 15s ease infinite; }
+.animate-tilt { animation: tilt 10s infinite linear; }
+
 /* Scrollbar Styles */
 ::-webkit-scrollbar {
   width: 8px;

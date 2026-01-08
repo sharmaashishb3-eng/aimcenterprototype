@@ -127,10 +127,10 @@ CREATE TABLE IF NOT EXISTS payments (
 );
 
 -- Function to handle new user signup
-CREATE OR REPLACE FUNCTION handle_new_user()
+CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO profiles (id, email, full_name, phone, exam_preference, role)
+  INSERT INTO public.profiles (id, email, full_name, phone, exam_preference, role)
   VALUES (
     NEW.id,
     NEW.email,
@@ -138,7 +138,13 @@ BEGIN
     COALESCE(NEW.raw_user_meta_data->>'phone', ''),
     COALESCE(NEW.raw_user_meta_data->>'exam_preference', ''),
     'student'
-  );
+  )
+  ON CONFLICT (id) DO UPDATE SET
+    email = EXCLUDED.email,
+    full_name = EXCLUDED.full_name,
+    phone = EXCLUDED.phone,
+    exam_preference = EXCLUDED.exam_preference,
+    updated_at = NOW();
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

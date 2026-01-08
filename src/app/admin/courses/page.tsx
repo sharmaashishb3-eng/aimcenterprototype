@@ -14,37 +14,45 @@ export default function AdminCoursesPage() {
     const [reviewNotes, setReviewNotes] = useState("");
 
     useEffect(() => {
+        let ignore = false;
+
+        const fetchCourses = async () => {
+            const supabase = createClient();
+            const { data: { user } } = await supabase.auth.getUser();
+
+            if (!user) {
+                router.push("/auth/login");
+                return;
+            }
+
+            const { data: profile } = await supabase
+                .from("profiles")
+                .select("role")
+                .eq("id", user.id)
+                .single();
+
+            if (profile?.role !== "admin") {
+                router.push("/dashboard");
+                return;
+            }
+
+            const { data } = await supabase
+                .from("courses")
+                .select("*")
+                .order("created_at", { ascending: false });
+
+            if (!ignore) {
+                setCourses(data || []);
+                setLoading(false);
+            }
+        };
+
         fetchCourses();
-    }, []);
 
-    const fetchCourses = async () => {
-        const supabase = createClient();
-        const { data: { user } } = await supabase.auth.getUser();
-
-        if (!user) {
-            router.push("/auth/login");
-            return;
-        }
-
-        const { data: profile } = await supabase
-            .from("profiles")
-            .select("role")
-            .eq("id", user.id)
-            .single();
-
-        if (profile?.role !== "admin") {
-            router.push("/dashboard");
-            return;
-        }
-
-        const { data } = await supabase
-            .from("courses")
-            .select("*")
-            .order("created_at", { ascending: false });
-
-        setCourses(data || []);
-        setLoading(false);
-    };
+        return () => {
+            ignore = true;
+        };
+    }, [router]);
 
     const handleReview = async (courseId: string, action: "publish" | "reject") => {
         const supabase = createClient();
@@ -126,8 +134,8 @@ export default function AdminCoursesPage() {
                                 key={status}
                                 onClick={() => setFilter(status as CourseStatus | "all")}
                                 className={`px-4 py-2 rounded-xl font-medium transition-all ${filter === status
-                                        ? "bg-gradient-to-r from-[#00CED1] to-[#D81B60] text-white"
-                                        : "bg-white text-gray-600 hover:bg-gray-100"
+                                    ? "bg-gradient-to-r from-[#00CED1] to-[#D81B60] text-white"
+                                    : "bg-white text-gray-600 hover:bg-gray-100"
                                     }`}
                             >
                                 {status === "all"

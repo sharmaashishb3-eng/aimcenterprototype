@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 
 interface Question {
     id: string;
@@ -13,7 +14,7 @@ type QuestionStatus = "not_visited" | "not_answered" | "answered" | "marked" | "
 
 export default function TestAttemptPage() {
     const router = useRouter();
-    const params = useParams();
+    // const params = useParams();
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState<Record<string, string>>({});
     const [questionStatus, setQuestionStatus] = useState<Record<string, QuestionStatus>>({});
@@ -21,7 +22,7 @@ export default function TestAttemptPage() {
     const [showSubmitModal, setShowSubmitModal] = useState(false);
 
     // Sample questions for demo
-    const questions: Question[] = [
+    const questions: Question[] = useMemo(() => [
         {
             id: "1",
             question_text: "What is the capital of India?",
@@ -72,7 +73,25 @@ export default function TestAttemptPage() {
                 { id: "d", text: "Saturn" },
             ],
         },
-    ];
+    ], []);
+
+    const handleSubmit = useCallback(() => {
+        // Calculate score (demo)
+        const correctAnswers: Record<string, string> = {
+            "1": "b",
+            "2": "c",
+            "3": "b",
+            "4": "c",
+            "5": "b",
+        };
+        let score = 0;
+        Object.entries(answers).forEach(([qId, ans]) => {
+            if (correctAnswers[qId] === ans) score++;
+        });
+
+        alert(`Test submitted! Your score: ${score}/${questions.length}`);
+        router.push("/dashboard");
+    }, [answers, router, questions.length]);
 
     // Timer
     useEffect(() => {
@@ -88,7 +107,7 @@ export default function TestAttemptPage() {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, []);
+    }, [handleSubmit]);
 
     // Initialize question status
     useEffect(() => {
@@ -97,7 +116,7 @@ export default function TestAttemptPage() {
             initialStatus[q.id] = i === 0 ? "not_answered" : "not_visited";
         });
         setQuestionStatus(initialStatus);
-    }, []);
+    }, [questions]);
 
     const formatTime = (seconds: number) => {
         const hrs = Math.floor(seconds / 3600);
@@ -153,23 +172,7 @@ export default function TestAttemptPage() {
         });
     };
 
-    const handleSubmit = useCallback(() => {
-        // Calculate score (demo)
-        const correctAnswers: Record<string, string> = {
-            "1": "b",
-            "2": "c",
-            "3": "b",
-            "4": "c",
-            "5": "b",
-        };
-        let score = 0;
-        Object.entries(answers).forEach(([qId, ans]) => {
-            if (correctAnswers[qId] === ans) score++;
-        });
 
-        alert(`Test submitted! Your score: ${score}/${questions.length}`);
-        router.push("/dashboard");
-    }, [answers, router, questions.length]);
 
     const getStatusColor = (status: QuestionStatus) => {
         switch (status) {
@@ -253,14 +256,14 @@ export default function TestAttemptPage() {
                                     key={option.id}
                                     onClick={() => handleSelectOption(option.id)}
                                     className={`w-full p-4 rounded-xl text-left transition-all flex items-center gap-4 ${answers[questions[currentQuestion].id] === option.id
-                                            ? "bg-[#00CED1] text-white border-2 border-[#00CED1]"
-                                            : "bg-gray-50 hover:bg-gray-100 border-2 border-gray-200"
+                                        ? "bg-[#00CED1] text-white border-2 border-[#00CED1]"
+                                        : "bg-gray-50 hover:bg-gray-100 border-2 border-gray-200"
                                         }`}
                                 >
                                     <span
                                         className={`w-8 h-8 rounded-full flex items-center justify-center font-bold uppercase ${answers[questions[currentQuestion].id] === option.id
-                                                ? "bg-white text-[#00CED1]"
-                                                : "bg-gray-200 text-gray-600"
+                                            ? "bg-white text-[#00CED1]"
+                                            : "bg-gray-200 text-gray-600"
                                             }`}
                                     >
                                         {option.id}
